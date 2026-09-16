@@ -1,0 +1,61 @@
+﻿@page "/"
+@using Tarea2.Models;
+@using Tarea2.Context;
+@using Tarea2.Service;
+<PageTitle>Consultar Estudiante</PageTitle>
+
+<div class="container">
+    <div class="card border-4">
+        <div>
+            <h4 class="text-center">Consultar Estudiante</h4>
+        </div>
+        <div class="card border-4">
+            <div>
+                <label>Filtrar</label>
+                <select style="width:75px;">
+                    <option>ID</option>
+                    <option>Nombre</option>
+                    <option>Direccion</option>
+                    <option>Email</option>
+                    <option>Fecha de Nacimiento</option>
+                </select>
+                <label>Busquedad</label>
+                <input class="text"/>
+                <button class="btn btn-primary" style="margin-left:350px">Buscar</button>
+            </div>
+        </div>
+        <table class="table table-bordered">
+            <thead>
+               <tr>
+                   <th>Id</th>
+                    <th>Nombre</th>
+                    <th>Dirrecion</th>
+                    <th>Email</th>
+                    <th>Fecha de Nacimiento</th>
+               </tr>
+            </thead>
+            <tbody>
+                @foreach(var Estudiante in estudiantes)
+                {
+                    <tr>
+                        <th>@Estudiante.EstudianteId</th>
+                        <th>@Estudiante.Nombre</th>
+                        <th>@Estudiante.Dirrecion</th>
+                        <th>@Estudiante.Email</th>
+                        <th>@Estudiante.FechaNacimiento</th>
+                    </tr>
+                }
+            </tbody>
+        </table>
+        <div>
+            
+        </div>
+    </div>
+</div>
+
+@code{
+
+    public List<Estudiantes> estudiantes = new();
+
+
+}
