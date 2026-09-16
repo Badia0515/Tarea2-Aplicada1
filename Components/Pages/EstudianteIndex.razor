@@ -2,6 +2,7 @@
 @using Tarea2.Models;
 @using Tarea2.Context;
 @using Tarea2.Service;
+@inject EstudianteService estudianteService;
 <PageTitle>Consultar Estudiante</PageTitle>
 
 <div class="container">
@@ -56,6 +57,51 @@
 @code{
 
     public List<Estudiantes> estudiantes = new();
+    public string filtar{ get; set; }
+    public string ValorFiltar { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        estudiantes = await estudianteService.GetList(L => true);
+    }
+
+    public async Task Filtrar()
+    {
+        if (ValorFiltar.Trim() != "")
+        {
+            if (filtar == "ID")
+            {
+                int.TryParse(ValorFiltar, out int id);
+                estudiantes = await estudianteService.GetList(L => L.EstudianteId == id);
+            }
+            if (filtar == "Nombre")
+            {
+                estudiantes = await estudianteService.GetList(L => L.Nombre.Contains(ValorFiltar));
+            }
+            if (filtar == "Direccion")
+            {
+                estudiantes = await estudianteService.GetList(L => L.Dirrecion.Contains(ValorFiltar));
+            }
+            if (filtar == "Nombre")
+            {   
+                estudiantes = await estudianteService.GetList(L => L.Nombre.Contains(ValorFiltar));
+            }
+            if (filtar == "Nombre")
+            {
+                estudiantes = await estudianteService.GetList(L => L.Nombre.Contains(ValorFiltar));
+            }
+        }
+
+    }
+    public async Task EliminarEstudiante(int id)
+    {
+        await estudianteService.Eliminar(id);
+        estudiantes = await estudianteService.GetList(L => true);
+
+    }
 
 
+
+
+   
 }
