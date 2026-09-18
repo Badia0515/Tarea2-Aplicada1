@@ -1,8 +1,8 @@
 ﻿@page "/"
 @using Tarea2.Models;
-@using Tarea2.Context;
 @using Tarea2.Service;
 @inject EstudianteService estudianteService;
+
 <PageTitle>Consultar Estudiante</PageTitle>
 
 <div class="container">
@@ -59,6 +59,7 @@
     public List<Estudiantes> estudiantes = new();
     public string filtar{ get; set; }
     public string ValorFiltar { get; set; }
+    public Estudiantes GuardarEstudiante { get; set; }
 
     protected override async Task OnInitializedAsync()
     {
@@ -100,8 +101,23 @@
 
     }
 
+    public async Task Edicion(int id)
+    {
+        var estudianteEdicion = await estudianteService.Buscar(id);
+        if (estudianteEdicion != null)
+        {
+            GuardarEstudiante = estudianteEdicion;
+        }
 
+        estudiantes = await estudianteService.GetList(L => true);
 
+    }
 
+    public async Task GuaedfdarEdicion()
+    {
+        await estudianteService.Editar(GuardarEstudiante);
+        estudiantes = await estudianteService.GetList(L => true);
+
+    }
    
 }
