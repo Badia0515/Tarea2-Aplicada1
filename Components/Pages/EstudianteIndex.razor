@@ -2,6 +2,7 @@
 @using Tarea2.Models;
 @using Tarea2.Service;
 @inject EstudianteService estudianteService;
+@rendermode InteractiveServer
 
 <PageTitle>Consultar Estudiante</PageTitle>
 
@@ -44,11 +45,13 @@
                         <th>@Estudiante.Dirrecion</th>
                         <th>@Estudiante.Email</th>
                         <th>@Estudiante.FechaNacimiento</th>
+                        <butto class="btn btn-warning" @onclick="()=> EliminarEstudiante(Estudiante.EstudianteId)">Eliminar</butto>
+                        <butto class="color:red" @onclick="() => EditarPagina(Estudiante.EstudianteId)">Editar</butto>
                     </tr>
                 }
             </tbody>
         </table>
-        <div>
+        <div>S
             
         </div>
     </div>
@@ -59,7 +62,6 @@
     public List<Estudiantes> estudiantes = new();
     public string filtar{ get; set; }
     public string ValorFiltar { get; set; }
-    public Estudiantes GuardarEstudiante { get; set; }
 
     protected override async Task OnInitializedAsync()
     {
@@ -100,24 +102,11 @@
         estudiantes = await estudianteService.GetList(L => true);
 
     }
-
-    public async Task Edicion(int id)
+    public Task EditarPagina()
     {
-        var estudianteEdicion = await estudianteService.Buscar(id);
-        if (estudianteEdicion != null)
-        {
-            GuardarEstudiante = estudianteEdicion;
-        }
-
-        estudiantes = await estudianteService.GetList(L => true);
-
+        
     }
 
-    public async Task GuardarEdicion()
-    {
-        await estudianteService.Editar(GuardarEstudiante);
-        estudiantes = await estudianteService.GetList(L => true);
-
-    }
+   
    
 }

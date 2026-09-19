@@ -1,64 +1,62 @@
 ﻿@page "/weather"
-@attribute [StreamRendering]
+@page "/Edicion"
+@using Tarea2.Models
+@using Tarea2.Service
+@inject EstudianteService estudinateService;
+@rendermode InteractiveServer
 
-<PageTitle>Weather</PageTitle>
+<PageTitle>Modo Edicion</PageTitle>
 
-<h1>Weather</h1>
+<div class="container">
+    <div class=" card border-4"style="width:400px; margin:auto; height:240px">
+        <div class="text-center">
+            <h5>Modo Edicion</h5>
+            <label>Nombre</label>
+            <input class="text"@bind="estudianteEdicion.Nombre" />
+            <br />
+            <label>Dirrecion</label>
+            <input class="text"@bind="estudianteEdicion.Dirrecion" />
+            <br />
+            <label>Email</label>
+            <input class="text" @bind="estudianteEdicion.Email" />
+            <br />
+            <label>Fecha de Nacimiento</label>
+            <input class="text" @bind="estudianteEdicion.FechaNacimiento" />
+            <br />
+            <br />
+            <button class="btn btn-warning">Consultar</button> 
+                    <button class="btn btn-primary">Guardar</button>         
+     
 
-<p>This component demonstrates showing data.</p>
+            
 
-@if (forecasts == null)
-{
-    <p><em>Loading...</em></p>
-}
-else
-{
-    <table class="table">
-        <thead>
-            <tr>
-                <th>Date</th>
-                <th aria-label="Temperature in Celsius">Temp. (C)</th>
-                <th aria-label="Temperature in Fahrenheit">Temp. (F)</th>
-                <th>Summary</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var forecast in forecasts)
-            {
-                <tr>
-                    <td>@forecast.Date.ToShortDateString()</td>
-                    <td>@forecast.TemperatureC</td>
-                    <td>@forecast.TemperatureF</td>
-                    <td>@forecast.Summary</td>
-                </tr>
-            }
-        </tbody>
-    </table>
-}
+        </div>
+       
+
+    </div>
+    
+</div>
+
 
 @code {
-    private WeatherForecast[]? forecasts;
+    Estudiantes estudianteEdicion { get; set; } = new();
+    public List<Estudiantes> Estudiantes { get; set; } = [];
 
-    protected override async Task OnInitializedAsync()
+
+    public async Task Edicion(int id)
     {
-        // Simulate asynchronous loading to demonstrate streaming rendering
-        await Task.Delay(500);
-
-        var startDate = DateOnly.FromDateTime(DateTime.Now);
-        var summaries = new[] { "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching" };
-        forecasts = Enumerable.Range(1, 5).Select(index => new WeatherForecast
+        var Estudiante = await estudinateService.Buscar(id);
+        if (Estudiante != null)
         {
-            Date = startDate.AddDays(index),
-            TemperatureC = Random.Shared.Next(-20, 55),
-            Summary = summaries[Random.Shared.Next(summaries.Length)]
-        }).ToArray();
+            estudianteEdicion = Estudiante;
+        }
     }
 
-    private class WeatherForecast
+    public async Task GuardarEdicion(int id)
     {
-        public DateOnly Date { get; set; }
-        public int TemperatureC { get; set; }
-        public string? Summary { get; set; }
-        public int TemperatureF => 32 + (int)(TemperatureC / 0.5556);
+        await estudinateService.Editar(estudianteEdicion);
+        Estudiantes = await estudinateService.GetList(L => true);
+
     }
+
 }

@@ -1,6 +1,7 @@
 using Tarea2.Components;
 using Tarea2.Context;
 using Microsoft.EntityFrameworkCore;
+using Tarea2.Service;
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -10,9 +11,8 @@ builder.Services.AddRazorComponents()
     .AddInteractiveServerComponents();
 
 var Servidor = builder.Configuration.GetConnectionString("Conexion");
-builder.Services.AddDbContext<EstudianteContext>(opcion => opcion.UseSqlServer(Servidor));
-
-
+builder.Services.AddDbContextFactory<EstudianteContext>(opcion => opcion.UseSqlServer(Servidor));
+builder.Services.AddScoped<EstudianteService>();
 
 var app = builder.Build();
 
